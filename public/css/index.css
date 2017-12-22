@@ -1,0 +1,144 @@
+/* section main */
+.main{
+    height : 500px;
+    position:relative;
+    overflow:hidden;
+}
+.slide{
+    width:100%;
+    height:100%;
+}
+.slide li{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    position:absolute;
+    top:0;
+    left:0;
+    display:flex;
+    align-items: center;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+.slide img{
+    width:100%;
+    min-width: 1200px;
+    min-height: 100%;
+}
+@keyframes slide-to-right{
+    from{left : 0;}
+    to{left:100%}
+}
+@keyframes slide-to-middle{
+    from{left : -100%;}
+    to{left:0}
+}
+.main-wrap{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(0, 0, 0, 0.51);
+    z-index:6;
+}
+.main-login-form{
+    width:300px;
+    height:100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin-left:60%;
+    padding:20px;
+}
+.main-login-title{
+    padding:10px;
+    padding-left:0;
+}
+.main-login-inputBox{
+    width:100%;
+    height:80px;
+    margin:10px 0;
+}
+.main-login-inputBox input{
+    float:left;
+    width:70%;
+    height: 50%;
+    border:none;
+    padding:5px;
+}
+.main-login-inputBox button{
+    float:right;
+    width:30%;
+    height:100%;
+    background-color: #4a4a4a;
+    border:none;
+    color:white;
+    cursor:pointer;
+}
+.main-login-btn-join{
+    width:100%;
+    height:30px;
+    border:none;
+    background-color: gray;
+    color:#fff;
+    margin-top:10px;
+}
+.main-login-save{
+    float:left;
+    width:50%;
+}
+.main-login-find{
+    float:right;
+    width:50%;
+    text-align: right;
+}
+
+/* section cloth */
+.showjob{
+    width : 100%;
+}
+.showjob-title{
+    font-size:44px;
+    text-align:center;
+    padding:80px;
+}
+.showjob-title span{
+    font-weight : bold;
+    color:red;
+}
+.showjob-list{
+    width : 100%;
+}
+.showjob-list li{
+    width : 25%;
+    float:left;
+}
+.showjob-list-title{
+    font-size : 30px;
+    text-align : center;
+    font-weight:bold;
+    padding:10px;
+    padding-top:20px;
+}
+.showjob-list-img{
+    display:block;
+    margin:0 auto;
+    width : 130px;
+    height: 130px;
+}
+.showjob-list-content{
+    font-size : 20px;
+    text-align:center;
+    padding : 10px;
+}
+.showjob-list-golink{
+    display : block;
+    width  : 100px;
+    height : 40px;
+    margin: 15px auto;
+    border:3px solid black;
+    transition : background-color 0.5s, color 0.5s;
+}
+.showjob-list li:hover .showjob-list-golink{
+    background-color: red;
+    color:white;
+}
