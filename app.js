@@ -6,7 +6,6 @@ var session     = require('express-session');
 var mongoose    = require('mongoose');
 var schema      = mongoose.Schema;
 
-
 /* set session */
 app.use(session({
     secret: '@#@$MYSIGN#@$#$',
@@ -20,14 +19,14 @@ app.use(bodyparser.urlencoded({ extended : true }));
 app.use(bodyparser.json());
 app.use(express.static(__dirname + '/public'));
 
-var port = process.env.PORT || 3000;
-
 /* models */
-var Book = require('./models/book');
-var User = require('./models/user');
+var Book    = require('./models/book');
+var User    = require('./models/user');
+var Product = require('./models/product');
 var models = {
     Book : Book,
-    User : User
+    User : User,
+    Product : Product
 }
 
 /* router */
@@ -39,9 +38,10 @@ db.on('error', console.error);
 db.once('open', function(){
     console.log("Connected to mongod server");
 });
-mongoose.connect('mongodb://localhost/shopping');
+mongoose.connect('mongodb://127.0.0.1:27017/shopping');
 
 /* listen server */
+var port = process.env.PORT || 3000;
 var server = app.listen(port,function(){
     console.log("express server is running in port : " + port);
 });

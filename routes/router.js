@@ -1,36 +1,53 @@
+var multer = require("multer");
+var upload = multer({"dest" : "public/uploads/"});
+var fs     = require("fs");
+
 module.exports = function(app, models){
     var Book = models.Book;
     var User = models.User;
+    var Product = models.Product;
     
     //render main page
     app.get("/",function(req, res){
-        res.render("index.ejs", { css : "index.css" } );
+        res.render("index.ejs",{
+            page : "view/home.ejs",
+            userinfo : req.session.userinfo
+        });
     });
     
-    //login
+    /* show login page */
+    app.get("/user/login",function(req, res){
+        res.render("index.ejs",{
+            page : "user/login.ejs",
+            userinfo : req.session.userinfo,
+        });
+    });
+    
+    /* login */
     app.post("/user/login",function(req, res){
         var userid = req.body.userid;
         var userpw = req.body.userpw;
         
-        User.find({ userid : userid },function(err, userid){
+        User.find({ userid : userid, userpw : userpw },function(err, userinfo){
             if(err) res.status(500).send({error : "database failure"});
-            if(userid.length != 0){
+            if(userinfo.length != 0){
                 //when login success
-                req.session.userid = userid;
+                req.session.userinfo = userinfo[0];
+                res.redirect("/");
             }
             else{
                 //when login failure
-                res.redirect("/");
+                console.log("333");
+                res.redirect("/user/login?error=notfound");
             }
         });
     });
     
     //register
     app.get("/user/register",function(req, res){
-        res.render("register.ejs", { css : "register.css" } );
+        res.render("register.ejs", { css : "register.css" ,userinfo:req.session.userinfow} );
     });
     app.post("/user/register",function(req,res){
-        
         var userid = req.body.userid;
         var userpw = req.body.userpw;
         var usernm = req.body.usernm;
@@ -68,8 +85,43 @@ module.exports = function(app, models){
         });
     });
     
+    /* logout */
+    app.get("/user/logout",function(req, res){
+        var backurl = req.header("Referer") || "/";
+        
+        req.session.userinfo = undefined;
+        res.redirect(backurl);
+    });
     
+    /* register new product */
+    app.get("/product/newProduct",function(req,res){
+        res.render("newProduct.ejs",{
+            "css" : "newProduct.css",
+            "userinfo" : req.session.userinfo
+        });
+    });
     
+    app.post("/product/newProduct",upload.single('image'),function(req,res){
+        var product = new models.Product();
+        var image_url = new Date().getTime();
+        
+        product.name      = req.body.pname;
+        product.price     = req.body.pname;
+        product.image_url = image_url;
+        product.category  = req.body.category;
+        
+        console.log( req.body.category);
+        
+        product.save(function(err){
+            if(err){
+                console.error(err);
+                res.json({result : 0});
+                return;
+            }
+        });
+//        fs.rename(image.path,"public/img/product/"+image_url);
+        res.redirect("/product/newProduct");
+    });
     
     
     
