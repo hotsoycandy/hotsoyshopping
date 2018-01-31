@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="col-md-9 mx-auto">
+        <form class="row p-5" action="/product/buyProduct" method="post">
+            <div class="col-md-5">
+                <h3 class="text-center mb-4"><%- product.name -%></h3>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">PRICE    : <%- product.price -%>￦</li>
+                    <li class="list-group-item">CATEGORY : <%- product.category -%></li>
+                </ul>
+                <input id="quntity" type="number" class="form-control mb-3" value="1" min="1" max="99">
+                <h4 id="total" class="pr-2 pt-2 pb-2"> Total : <input type="text"style="width:100px;"
+                class="text-right border-0" name="price" value="<%- product.price -%>" readonly>￦</h4>
+                <div class="btn-group" style="width:100%;">
+                    <input type="submit" name="type" value="buy"  class="btn btn-outline-success btn-block"/>
+                    <input type="submit" name="type" value="cart" class="btn btn-outline-primary btn-block mt-0"/>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <img src="/product/<%- product.image_url -%>"
+                alt="product image" style="width:100%;">
+            </div>
+            <!-- product values -->
+            <input type="hidden" name="id" value="<%- product.id  -%>">
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#quntity").change(function(){
+        var val = parseInt($(this).val());
+        $("#total input").val(val*<%- product.price -%>);
+    });
+</script>

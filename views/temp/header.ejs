@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>hotsoyshopping</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/iconic/css/open-iconic-bootstrap.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -17,23 +18,26 @@
             </a>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="#">Features</a>
-                    <a class="nav-item nav-link" href="#">Pricing</a>
+                    <a class="nav-item nav-link" href="/">Home</a>
+                    <a class="nav-item nav-link" href="/product/newProduct">New Product</a>
                 </div>
             </div>
-            <a class="btn btn-info mr-2" href="/user/login">Login</a> 
-            <a class="btn btn-info" href="">Register</a>
+            <div class="form-inline my-2 my-lg-0">
+                <% if(userinfo){ %>
+                    <a class="btn btn-info btn-sm ml-2" href="/user/login" >MY ACCOUNT <span class="oi oi-align-center"></span></a>
+                    <a class="btn btn-info btn-sm ml-2" href="/user/login" >CART <span class="oi oi-cart"></span></a>
+                    <a class="btn btn-info btn-sm ml-2" href="/user/logout" >LOGOUT <span class="oi oi-account-logout"></span></a>
+                <% }else{ %>
+                    <a class="btn btn-info btn-sm ml-2" href="/user/login">LOGIN <span class="oi oi-account-login"></span></a>
+                    <a class="btn btn-info btn-sm ml-2" href="/user/register">REGISTER <span class="oi oi-chevron-bottom"></span></a>
+                <% } %>
+            </div>
         </div>
     </nav>
     <div class="jumbotron">
-        <div class="container">
-            <div class="row justify-content-center">
-                <h1 class="display-3">SHOPPING MALL</h1>
-            </div>
-            <div class="row justify-content-center">
-                <p class="lead">We Sell Everything</p>
-            </div>
+        <div class="container p-0">
+            <h1 class="display-3 text-center">SHOPPING MALL</h1>
+            <p class="lead text-center">We Sell Everything</p>
             <div class="row justify-content-center">
                 <form class="input-group col-md-9 align-self-center" action="" method="post">
                     <input type="text" class="form-control" placeholder="Enter your product">

@@ -1,34 +1,48 @@
-var multer = require("multer");
-var upload = multer({"dest" : "public/uploads/"});
-var fs     = require("fs");
+const fs     = require("fs");
+const multer = require("multer");
+const upload = multer({"dest" : "public/product/"});
 
 module.exports = function(app, models){
-    var Book = models.Book;
-    var User = models.User;
-    var Product = models.Product;
+    const Book    = models.Book;
+    const User    = models.User;
+    const BuyLog  = models.buyLog;
+    const Product = models.Product;
     
-    //render main page
-    app.get("/",function(req, res){
-        res.render("index.ejs",{
-            page : "view/home.ejs",
+    function render(req,res,page,options = []){
+        var param  = {
+            page : page,
             userinfo : req.session.userinfo
+        }
+        param = Object.assign(param,options);
+        res.render("index.ejs",param);
+    }
+    
+    function ch_login(req,res){
+        if(req.session.userinfo == undefined){
+            res.redirect("/user/login?error=notlogined");
+            return true;
+        }
+    }
+    
+    /* render main page */
+    app.get("/",function(req, res){
+        Product.find(function(err,products){
+            render(req,res,"view/home.ejs",{products : products});
         });
     });
     
     /* show login page */
     app.get("/user/login",function(req, res){
-        res.render("index.ejs",{
-            page : "user/login.ejs",
-            userinfo : req.session.userinfo,
-        });
+        if(req.session.userinfo) res.redirect("/");
+        render(req,res,"user/login.ejs",{error : req.query.error});
     });
     
     /* login */
     app.post("/user/login",function(req, res){
-        var userid = req.body.userid;
-        var userpw = req.body.userpw;
+        var email = req.body.userid;
+        var password = req.body.userpw;
         
-        User.find({ userid : userid, userpw : userpw },function(err, userinfo){
+        User.find({ email : email, password : password },function(err, userinfo){
             if(err) res.status(500).send({error : "database failure"});
             if(userinfo.length != 0){
                 //when login success
@@ -37,51 +51,37 @@ module.exports = function(app, models){
             }
             else{
                 //when login failure
-                console.log("333");
                 res.redirect("/user/login?error=notfound");
             }
         });
     });
     
-    //register
+    /* register */
     app.get("/user/register",function(req, res){
-        res.render("register.ejs", { css : "register.css" ,userinfo:req.session.userinfow} );
+        render(req,res,"user/register.ejs");
     });
+    
     app.post("/user/register",function(req,res){
-        var userid = req.body.userid;
-        var userpw = req.body.userpw;
-        var usernm = req.body.usernm;
-        var userad = req.body.userad;
-        var phone1 = req.body.phone1;
-        var phone2 = req.body.phone2;
-        var phone3 = req.body.phone3;
-        
-        /* upload to server */
         var newUser = new User();
-        newUser.userad = userad;
-        newUser.userid = userid;
-        newUser.userpw = userpw;
-        newUser.usernm = usernm;
-        newUser.userph = phone1+"-"+phone2+"-"+phone3;
+        newUser.email    = req.body.userid;
+        newUser.password = req.body.userpw;
+        newUser.name     = req.body.usernm;
+        newUser.address  = req.body.userad;
+        newUser.phone    = req.body.phone1 +"-"+ req.body.phone2 +"-"+ req.body.phone3;
         
         newUser.save(function(err){
-            if(err){
-                console.error(err);
-                res.json({result : 0});
-            }
-            res.redirect("/");
+            if(err) throw err;
         });
+        res.redirect("/");
     });
     
     /* check id overlap */
     app.post("/user/overlap",function(req, res){
-        var userid = req.body.userid;
-        User.find({ userid : userid },function(err, userid){
+        var email = req.body.email;
+        User.find({ email : email },function(err, userid){
             if(err) res.status(500).send({error : "database failure"});
-            if(userid.length == 0)
-                res.json({"overlap" : true});
-            else
-                res.json({"overlap" : false});
+            if(userid.length == 0) res.json({"overlap" : false});
+            else res.json({"overlap" : true});
         });
     });
     
@@ -95,32 +95,63 @@ module.exports = function(app, models){
     
     /* register new product */
     app.get("/product/newProduct",function(req,res){
-        res.render("newProduct.ejs",{
-            "css" : "newProduct.css",
-            "userinfo" : req.session.userinfo
+        render(req,res,"view/newProduct.ejs");
+    });
+    
+    app.post("/product/newProduct", upload.single('productimage'),function(req,res){
+        var newProduct = new Product();
+        var image_url  = new Date().getTime();
+        
+        var filecode = req.file.originalname.split(".");
+        filecode   = filecode[filecode.length-1];
+        image_url = image_url+"."+filecode;
+        
+        newProduct.name      = req.body.product_name;
+        newProduct.price     = req.body.product_price;
+        newProduct.category  = req.body.category;
+        newProduct.image_url = image_url;
+        
+        newProduct.save(function(err){
+            if(err) throw err;
+        });
+        
+        fs.rename(req.file.path,"public/product/"+image_url);
+        res.redirect("/");
+    });
+    
+    /* show product detail */
+    app.get("/product/showProduct",function(req,res){
+        var product_id = req.query.product;
+        if(product_id == undefined || !product_id || product_id =="" ){res.redirect("/"); return;}
+        Product.findById(product_id,function(err,product){
+            if(product == undefined){ res.redirect("/"); return; }
+            if(err) throw err;
+            render(req,res,"view/showProduct.ejs",{product:product});
         });
     });
     
-    app.post("/product/newProduct",upload.single('image'),function(req,res){
-        var product = new models.Product();
-        var image_url = new Date().getTime();
+    app.post("/product/buyProduct",function(req,res){
+        if(ch_login(req,res)) return;
+        var user = req.session.userinfo;
         
-        product.name      = req.body.pname;
-        product.price     = req.body.pname;
-        product.image_url = image_url;
-        product.category  = req.body.category;
+        var pid     = req.body.id;
+        var bid     = user._id;
+        var type    = req.body.type;
+        var price   = req.body.price;
+        var quntity = req.body.quntity;
         
-        console.log( req.body.category);
-        
-        product.save(function(err){
-            if(err){
-                console.error(err);
-                res.json({result : 0});
-                return;
-            }
+        var buylog = new BuyLog();
+        buylog.pid     = pid;
+        buylog.bid     = bid
+        buylog.price   = price;
+        buylog.status  = type;
+        buylog.quntity = quntity;
+
+        buylog.save(function(err){
+            if(err) throw err;
         });
-//        fs.rename(image.path,"public/img/product/"+image_url);
-        res.redirect("/product/newProduct");
+        
+        res.redirect("/");
     });
     
     

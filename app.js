@@ -1,10 +1,10 @@
 /* load packages */
-var express     = require("express");
-var app         = express();
-var bodyparser  = require("body-parser");
-var session     = require('express-session');
-var mongoose    = require('mongoose');
-var schema      = mongoose.Schema;
+const express    = require("express");
+const app        = express();
+const bodyparser = require("body-parser");
+const session    = require('express-session');
+const mongoose   = require('mongoose');
+const schema     = mongoose.Schema;
 
 /* set session */
 app.use(session({
@@ -22,10 +22,12 @@ app.use(express.static(__dirname + '/public'));
 /* models */
 var Book    = require('./models/book');
 var User    = require('./models/user');
+var buyLog  = require('./models/buyLog');
 var Product = require('./models/product');
 var models = {
     Book : Book,
     User : User,
+    buyLog  : buyLog,
     Product : Product
 }
 

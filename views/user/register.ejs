@@ -1,0 +1,76 @@
+<div class="container">
+    <form id='register' class="col-md-8 mx-auto p-4" action="/user/register" method="post">
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" name="userid" placeholder="Enter email" required>
+            <p id="email-overlap" class="text-danger" style="display : none">Your email already used!</p>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="userpw" placeholder="Enter Password" pattern="^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$" required>
+            <small id="emailHelp" class="form-text text-muted">Must be 8~16 digits, including text, numbers, and special characters.</small>
+        </div>
+        <div class="form-group">
+            <label for="password2">Confirm  Password</label>
+            <input type="password" class="form-control" id="password2" placeholder="Enter Password" pattern="^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$" required>
+            <p id="pw-confirm" class="text-danger" style="display : none">confirm is not match</p>
+            <small id="emailHelp" class="form-text text-muted">Check your password again</small>
+        </div>
+        <div class="form-group">
+            <label for="name">Name (NickName)</label>
+            <input type="text" class="form-control" id="name" name="usernm" placeholder="Enter Name" pattern="^[a-zA-Z가-]{6,16}$" required>
+            <small id="emailHelp" class="form-text text-muted">Must be 6~16 digits, including text and number</small>
+        </div>
+        <div class="form-group">
+            <label for="Address">Home Address</label>
+            <input type="text" class="form-control" id="Address" name="userad" placeholder="Enter Address" required>
+        </div>
+        <div class="form-group">
+            <label for="Address">Phone</label>
+            <div class="input-group-prepend input-group-sm col-6 p-0">
+                <select type="text" class="form-control mr-2" name="phone1" id="">
+                    <option value="010">010</option>
+                    <option value="011">011</option>
+                    <option value="070">070</option>
+                </select> - 
+                <input type="text" class="form-control mr-2 ml-2" name="phone2" pattern="^[0-9]{3,4}$" required> - 
+                <input type="text" class="form-control mr-2 ml-2" name="phone3" pattern="^[0-9]{3,4}$" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success mt-5">Submit</button>
+    </form>
+</div>
+<script type="text/javascript">
+    $("#register").submit(function(e){
+        var submit = true;
+        if($("#password2").val() != $("#password").val()){
+            $("#pw-confirm").show();
+            $("#password2").select().focus();
+            submit = false;
+        }
+        
+        var email = $("#email").val();
+        $.ajax({
+            async : false,
+            "type" : "post",
+            dataType : "JSON",
+            url : "/user/overlap",
+            data : {email : email},
+            success : function(data){
+                if(data.overlap){
+                    $("#email-overlap").show();
+                    $("#email").select().focus();
+                    submit = false;
+                }
+            }
+        });
+        $("#email").keydown(function(){
+            $("#email-overlap").hide(); 
+        });
+        $("#password, #password2").keydown(function(){
+            $("#pw-confirm").hide();
+        });
+        return submit;
+    });
+</script>

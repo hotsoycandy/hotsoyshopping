@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="col-7 mx-auto">
+        <form action="/product/newProduct" method="post" enctype="multipart/form-data" id="productregister">
+            <div class="form-group">
+                <label for="productname">Product Name : </label>
+                <input id="productname" type="text" class="form-control" name="product_name" placeholder="Product Name" required>
+            </div>
+            <div class="form-group">
+                <label for="productprice">Product Price : </label>
+                <input id="productprice" type="number" name="product_price" class="form-control" placeholder="Product Price" required>
+            </div>
+            <div class="form-control mb-3">
+                <h6>Price category</h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="book" value="book" checked>
+                    <label class="form-check-label" for="book">
+                        Book
+                </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="food" value="food">
+                    <label class="form-check-label" for="food">
+                        Food
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="clothing" value="clothing">
+                    <label class="form-check-label" for="clothing">
+                        Clothing
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="computer" value="computer">
+                    <label class="form-check-label" for="computer">
+                        Computer
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="category" id="something" value="something">
+                    <label class="form-check-label" for="something">
+                        Something
+                    </label>
+                </div>
+            </div>
+            <div class="form-control mb-3">
+                <label for="productimage">Product Image : (only jpeg and png)(1 : 1.6)</label>
+                <input id="productimage" type="file" class="form-control-file" placeholder="Product name" accept="image/jpeg, image/png" name="productimage" required>
+            </div>
+            <button class="btn btn-block btn-outline-primary mb-4">Register Product</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#productregister").submit(function(){
+        var file = $("#productimage")[0].files[0];
+        if(!file.type.match("image/jpeg") && !file.type.match("image/png")){
+            alert("product image is not real image file\n It must be jpeg and png");
+            return false;
+        }
+    });
+</script>
