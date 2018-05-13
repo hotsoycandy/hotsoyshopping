@@ -8,7 +8,7 @@ const schema     = mongoose.Schema;
 
 /* set session */
 app.use(session({
-    secret: '@#@$MYSIGN#@$#$',
+    secret: '$#*$MYSIGN#@$#$',
     resave: false,
     saveUninitialized: true
 }));
@@ -31,7 +31,7 @@ var models = {
     Product : Product
 }
 
-/* router */
+/* model router */
 var router = require('./routes/router.js')(app, models);
 
 /* connect MongoDB */
@@ -40,10 +40,10 @@ db.on('error', console.error);
 db.once('open', function(){
     console.log("Connected to mongod server");
 });
-mongoose.connect('mongodb://127.0.0.1:27017/shopping');
+mongoose.connect('mongodb://localhost/shopping');
 
 /* listen server */
 var port = process.env.PORT || 3000;
-var server = app.listen(port,function(){
+var server = app.listen("3000",function(){
     console.log("express server is running in port : " + port);
 });

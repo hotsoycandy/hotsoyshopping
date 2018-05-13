@@ -7,7 +7,7 @@
                     <li class="list-group-item">PRICE    : <%- product.price -%>￦</li>
                     <li class="list-group-item">CATEGORY : <%- product.category -%></li>
                 </ul>
-                <input id="quntity" type="number" class="form-control mb-3" value="1" min="1" max="99">
+                <input id="quntity" type="number" name="quntity" class="form-control mb-3" value="1" min="1" max="99">
                 <h4 id="total" class="pr-2 pt-2 pb-2"> Total : <input type="text"style="width:100px;"
                 class="text-right border-0" name="price" value="<%- product.price -%>" readonly>￦</h4>
                 <div class="btn-group" style="width:100%;">
@@ -20,7 +20,8 @@
                 alt="product image" style="width:100%;">
             </div>
             <!-- product values -->
-            <input type="hidden" name="id" value="<%- product.id  -%>">
+            <input type="hidden" name="id" value="<%- product.id    -%>">
+            <input type="hidden" name="name" value="<%- product.name  -%>">
         </form>
     </div>
 </div>

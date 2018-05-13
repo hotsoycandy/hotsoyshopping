@@ -17,7 +17,7 @@ module.exports = function(app, models){
         res.render("index.ejs",param);
     }
     
-    function ch_login(req,res){
+    function check_login(req,res){
         if(req.session.userinfo == undefined){
             res.redirect("/user/login?error=notlogined");
             return true;
@@ -26,9 +26,19 @@ module.exports = function(app, models){
     
     /* render main page */
     app.get("/",function(req, res){
-        Product.find(function(err,products){
-            render(req,res,"view/home.ejs",{products : products});
-        });
+        var keyword = null;
+        
+        if( req.query.keyword ){
+            keyword = new RegExp(".*"+req.query.keyword+".*","i");
+            
+            Product.find({"name" : keyword},function(err,products){
+                render(req,res,"view/home.ejs",{products : products});
+            });
+        }else{
+            Product.find(function(err,products){
+                render(req,res,"view/home.ejs",{products : products});
+            });
+        }
     });
     
     /* show login page */
@@ -131,11 +141,12 @@ module.exports = function(app, models){
     });
     
     app.post("/product/buyProduct",function(req,res){
-        if(ch_login(req,res)) return;
+        if(check_login(req,res)) return;
         var user = req.session.userinfo;
         
         var pid     = req.body.id;
         var bid     = user._id;
+        var name    = req.body.name;
         var type    = req.body.type;
         var price   = req.body.price;
         var quntity = req.body.quntity;
@@ -143,10 +154,11 @@ module.exports = function(app, models){
         var buylog = new BuyLog();
         buylog.pid     = pid;
         buylog.bid     = bid
+        buylog.name    = name;
         buylog.price   = price;
         buylog.status  = type;
         buylog.quntity = quntity;
-
+        
         buylog.save(function(err){
             if(err) throw err;
         });
@@ -154,7 +166,14 @@ module.exports = function(app, models){
         res.redirect("/");
     });
     
-    
+    app.get("/user/information",function(req,res){
+        if(check_login(req,res)) return;
+        var userid = req.session.userinfo._id;
+        BuyLog.find({bid : userid},function(err,data){
+            if(err) throw err;
+            render(req,res,"user/information.ejs",{buylogs : data});
+        });
+    });
     
     
     
