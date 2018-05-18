@@ -1,5 +1,5 @@
 <section class="container">
-    <h1 class="display-4 p-5 text-center">We sell this</h1>
+    <h1 class="display-4 p-5 text-center"><%= keyword ? "'"+keyword +"'의 검색결과": "We sell this" %></h1>
     <div class="row justify-content-center">
         <div class="row col-md-11">
         <% for(var i=0; i<products.length; i++){ %>

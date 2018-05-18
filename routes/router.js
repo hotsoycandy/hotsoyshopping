@@ -26,19 +26,11 @@ module.exports = function(app, models){
     
     /* render main page */
     app.get("/",function(req, res){
-        var keyword = null;
+        var keyword = req.query.keyword ? req.query.keyword : "";
         
-        if( req.query.keyword ){
-            keyword = new RegExp(".*"+req.query.keyword+".*","i");
-            
-            Product.find({"name" : keyword},function(err,products){
-                render(req,res,"view/home.ejs",{products : products});
-            });
-        }else{
-            Product.find(function(err,products){
-                render(req,res,"view/home.ejs",{products : products});
-            });
-        }
+        Product.find({"name" : new RegExp(keyword)},function(err,products){
+            render(req,res,"view/home.ejs",{products : products, keyword : keyword});
+        });
     });
     
     /* show login page */

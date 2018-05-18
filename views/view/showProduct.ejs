@@ -2,14 +2,14 @@
     <div class="col-md-9 mx-auto">
         <form class="row p-5" action="/product/buyProduct" method="post">
             <div class="col-md-5">
-                <h3 class="text-center mb-4"><%- product.name -%></h3>
+                <h3 class="text-center mb-4"><%- (product.name) -%></h3>
                 <ul class="list-group mb-3">
-                    <li class="list-group-item">PRICE    : <%- product.price -%>￦</li>
+                    <li class="list-group-item">PRICE    : <%- money_format(product.price) -%></li>
                     <li class="list-group-item">CATEGORY : <%- product.category -%></li>
                 </ul>
                 <input id="quntity" type="number" name="quntity" class="form-control mb-3" value="1" min="1" max="99">
-                <h4 id="total" class="pr-2 pt-2 pb-2"> Total : <input type="text"style="width:100px;"
-                class="text-right border-0" name="price" value="<%- product.price -%>" readonly>￦</h4>
+                <h4 id="total" class="pr-2 pt-2 pb-2">Total : <span><%- money_format(product.price) -%></span></h4>
+                <input type="hidden" id="total_price" name="price" value="<%- product.price -%>">
                 <div class="btn-group" style="width:100%;">
                     <input type="submit" name="type" value="buy"  class="btn btn-outline-success btn-block"/>
                     <input type="submit" name="type" value="cart" class="btn btn-outline-primary btn-block mt-0"/>
@@ -27,7 +27,8 @@
 </div>
 <script type="text/javascript">
     $("#quntity").change(function(){
-        var val = parseInt($(this).val());
-        $("#total input").val(val*<%- product.price -%>);
+        var val = parseInt($(this).val()) * <%- product.price -%>;
+        $("#total span").text("￦ "+val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+        $("#total_price").val(val*<%- product.price -%>);
     });
 </script>
