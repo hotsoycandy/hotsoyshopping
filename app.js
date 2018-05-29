@@ -8,7 +8,7 @@ const schema     = mongoose.Schema;
 
 /* set session */
 app.use(session({
-    secret: '$#*$MYSIGN#@$#$',
+    secret: '#416#a#518^@#',
     resave: false,
     saveUninitialized: true
 }));
