@@ -108,9 +108,12 @@ module.exports = function(app, models){
         filecode   = filecode[filecode.length-1];
         image_url = image_url+"."+filecode;
         
+        var seller_id = req.session.userinfo._id;
+        
         newProduct.name      = req.body.product_name;
         newProduct.price     = req.body.product_price;
         newProduct.category  = req.body.category;
+        newProduct.seller_id = seller_id;
         newProduct.image_url = image_url;
         
         newProduct.save(function(err){

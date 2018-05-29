@@ -13,12 +13,12 @@ hotsoyshopping
 ---
 
 ### Category
->Food
->For bady
->Computer
->Ticket
->Coupon
->Sports
->Car Accessories
->Furniture
->Toy
+* Food
+* For bady
+* Computer
+* Ticket
+* Coupon
+* Sports
+* Car Accessories
+* Furniture
+* Toy
