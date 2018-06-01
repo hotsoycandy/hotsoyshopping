@@ -14,11 +14,13 @@ hotsoyshopping
 
 ### Category
 * Food
-* For bady
+* Bady
 * Computer
 * Ticket
 * Coupon
 * Sports
-* Car Accessories
+* Car Accessory
 * Furniture
 * Toy
+* Accessory
+* Game
