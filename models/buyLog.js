@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var bookSchema = new mongoose.Schema({
+var buyLogSchema = new mongoose.Schema({
     pid     : String, //product id
     bid     : String, //buyer id
     name    : String, //product name
@@ -10,4 +10,4 @@ var bookSchema = new mongoose.Schema({
     date    : { type : Date, default : Date.now } //buy day
 });
 
-module.exports = mongoose.model('buyLog', bookSchema);
+module.exports = mongoose.model('buyLog', buyLogSchema);

@@ -12,6 +12,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"> <%= products[i].name %> </li>
                         <li class="list-group-item"> <%= money_format(products[i].price) %> </li>
+                        <li class="list-group-item"> <%= products[i].category %> </li>
                         <li class="list-group-item">
                             <a href="/product/showProduct?product=<%= products[i].id %>" class="card-link">BUY</a>
                             <a href="#" class="card-link">IN CART</a>

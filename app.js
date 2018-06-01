@@ -19,16 +19,23 @@ app.use(bodyparser.urlencoded({ extended : true }));
 app.use(bodyparser.json());
 app.use(express.static(__dirname + '/public'));
 
-/* models */
-var Book    = require('./models/book');
-var User    = require('./models/user');
-var buyLog  = require('./models/buyLog');
-var Product = require('./models/product');
+/* set helemt for x-powered-body */
+var helmet = require('helmet');
+app.use(helmet());
+app.disable('x-powered-by');
+
+/* models */ 
+var Book     = require('./models/book');
+var User     = require('./models/user');
+var buyLog   = require('./models/buyLog');
+var Product  = require('./models/product');
+var Category = require('./models/category');
 var models = {
-    Book : Book,
-    User : User,
-    buyLog  : buyLog,
-    Product : Product
+    Book     : Book,
+    User     : User,
+    buyLog   : buyLog,
+    Product  : Product,
+    Category : Category
 }
 
 /* model router */

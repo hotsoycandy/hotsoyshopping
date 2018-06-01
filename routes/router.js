@@ -3,10 +3,11 @@ const multer = require("multer");
 const upload = multer({"dest" : "public/product/"});
 
 module.exports = function(app, models){
-    const Book    = models.Book;
-    const User    = models.User;
-    const BuyLog  = models.buyLog;
-    const Product = models.Product;
+    const Book     = models.Book;
+    const User     = models.User;
+    const BuyLog   = models.buyLog;
+    const Product  = models.Product;
+    const Category = models.Category;
     
     function render(req,res,page,options = []){
         var param  = {
@@ -97,28 +98,34 @@ module.exports = function(app, models){
     
     /* register new product */
     app.get("/product/newProduct",function(req,res){
-        render(req,res,"view/newProduct.ejs");
+        check_login(req,res);
+        
+        Category.find(function(err, category){
+            if(err) res.status(500).send({error : "database failure"});
+            render(req,res,"view/newProduct.ejs", {category : category});
+        });
     });
     
     app.post("/product/newProduct", upload.single('productimage'),function(req,res){
         var newProduct = new Product();
         var image_url  = new Date().getTime();
         
+        /* get image url */
         var filecode = req.file.originalname.split(".");
-        filecode   = filecode[filecode.length-1];
-        image_url = image_url+"."+filecode;
+        filecode     = filecode[filecode.length-1];
+        image_url    = image_url+"."+filecode;
         
+        /* get seller url */
         var seller_id = req.session.userinfo._id;
         
+        /* set product value */
         newProduct.name      = req.body.product_name;
         newProduct.price     = req.body.product_price;
         newProduct.category  = req.body.category;
         newProduct.seller_id = seller_id;
         newProduct.image_url = image_url;
         
-        newProduct.save(function(err){
-            if(err) throw err;
-        });
+        newProduct.save(function(err){ if(err) throw err;});
         
         fs.rename(req.file.path,"public/product/"+image_url);
         res.redirect("/");
@@ -175,6 +182,16 @@ module.exports = function(app, models){
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /* just practice code for me.... */
     
     //get : show book list
     app.get("/api/books",function(req,res){
