@@ -24,3 +24,14 @@ hotsoyshopping
 * Toy
 * Accessory
 * Game
+
+### Used modules
+
+* body-paser : ^1.18.2
+* ejs : ^2.5.7
+* express : ^4.16.2
+* expresssesion : ^1.15.6
+* helmet : ^3.12.1
+* mongodb : ^2.2.33
+* mongoose : ^4.13.1
+* multer : ^1.3.0

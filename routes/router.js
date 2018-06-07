@@ -28,8 +28,9 @@ module.exports = function(app, models){
     /* render main page */
     app.get("/",function(req, res){
         var keyword = req.query.keyword ? req.query.keyword : "";
+        var rule = keyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
         
-        Product.find({"name" : new RegExp(keyword)},function(err,products){
+        Product.find({"name" : new RegExp(rule)},function(err,products){
             render(req,res,"view/home.ejs",{products : products, keyword : keyword});
         });
     });
@@ -37,7 +38,7 @@ module.exports = function(app, models){
     /* show login page */
     app.get("/user/login",function(req, res){
         if(req.session.userinfo) res.redirect("/");
-        render(req,res,"user/login.ejs",{error : req.query.error});
+        render(req,res,"view/user/login.ejs",{error : req.query.error});
     });
     
     /* login */
@@ -61,7 +62,7 @@ module.exports = function(app, models){
     
     /* register */
     app.get("/user/register",function(req, res){
-        render(req,res,"user/register.ejs");
+        render(req,res,"view/user/register.ejs");
     });
     
     app.post("/user/register",function(req,res){
@@ -102,7 +103,7 @@ module.exports = function(app, models){
         
         Category.find(function(err, category){
             if(err) res.status(500).send({error : "database failure"});
-            render(req,res,"view/newProduct.ejs", {category : category});
+            render(req,res,"view/product/newProduct.ejs", {category : category});
         });
     });
     
@@ -138,7 +139,7 @@ module.exports = function(app, models){
         Product.findById(product_id,function(err,product){
             if(product == undefined){ res.redirect("/"); return; }
             if(err) throw err;
-            render(req,res,"view/showProduct.ejs",{product:product});
+            render(req,res,"view/product/showProduct.ejs",{product:product});
         });
     });
     
@@ -171,9 +172,10 @@ module.exports = function(app, models){
     app.get("/user/information",function(req,res){
         if(check_login(req,res)) return;
         var userid = req.session.userinfo._id;
-        BuyLog.find({bid : userid},function(err,data){
-            if(err) throw err;
-            render(req,res,"user/information.ejs",{buylogs : data});
+        BuyLog.find({bid : userid},function(err,buylogs){
+            Product.find({seller_id : req.session.userinfo._id },function(err,products){
+                render(req,res,"view/user/information.ejs",{buylogs : buylogs, products : products});
+            });
         });
     });
     

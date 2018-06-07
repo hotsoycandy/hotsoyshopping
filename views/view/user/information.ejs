@@ -16,19 +16,7 @@
             for(var i=0; i<buylogs.length; i++) { 
                 if(buylogs[i].status != "cart") continue;
                 count++;
-                var year  = buylogs[i].date.getFullYear();
-                
-                var month =
-                    buylogs[i].date.getMonth()+1 < 10 ?
-                    "0"+(buylogs[i].date.getMonth()+1) :
-                    (buylogs[i].date.getMonth()+1);
-                
-                var date =
-                    buylogs[i].date.getDate() < 10 ?
-                    "0"+(buylogs[i].date.getDate()) :
-                    (buylogs[i].date.getDate());
-                
-                var day = year+"-"+month+"-"+date;
+                var day = date_format(buylogs[i].date);
         %>
             <tr>
                 <th style="text-align:center;"><%= count %></th>
@@ -60,19 +48,7 @@
             for(var i=0; i<buylogs.length; i++) { 
                 if(buylogs[i].status != "buy") continue;
                 count++;
-                var year  = buylogs[i].date.getFullYear();
-                
-                var month =
-                    buylogs[i].date.getMonth()+1 < 10 ?
-                    "0"+(buylogs[i].date.getMonth()+1) :
-                    (buylogs[i].date.getMonth()+1);
-                
-                var date =
-                    buylogs[i].date.getDate() < 10 ?
-                    "0"+(buylogs[i].date.getDate()) :
-                    (buylogs[i].date.getDate());
-                
-                var day = year+"-"+month+"-"+date;
+                var day = date_format(buylogs[i].date);
         %>
             <tr>
                 <th style="text-align:center;"><%= count %></th>
@@ -80,6 +56,35 @@
                 <td style="text-align:center;"><%= buylogs[i].quntity %></td>
                 <td style="text-align:center;"><%= money_format(buylogs[i].price) %></td>
                 <td style="text-align:center;"><%= day %></td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+    <br/>
+    <br/>
+    <br/>
+    <h4>Your products</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col" style="text-align:center; width:5%;">#</th>
+                <th scope="col" style="text-align:center; width:30%;">Product name</th>
+                <th scope="col" style="text-align:center; width:20%;">Price</th>
+                <th scope="col" style="text-align:center; width:20%;">Registration dates</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% 
+            var count = 0;
+            for(var i=0; i<products.length; i++) { 
+                count++;
+//                var day = date_format(products[i].date);
+        %>
+            <tr>
+                <th style="text-align:center;"><%= count %></th>
+                <td style="text-align:center;"><%= products[i].name  %></td>
+                <td style="text-align:center;"><%= money_format(products[i].price) %></td>
+<!--                <td style="text-align:center;"><%= day %></td>-->
             </tr>
         <% } %>
         </tbody>

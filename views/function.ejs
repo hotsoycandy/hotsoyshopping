@@ -2,4 +2,22 @@
     money_format = function (num){
         return "￦ "+num.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
     }
+    
+    date_format = function(specific){
+        var year  = specific.date.getFullYear();
+
+        var month =
+            specific.date.getMonth()+1 < 10 ?
+            "0"+(specific.date.getMonth()+1) :
+            (specific.date.getMonth()+1);
+
+        var date =
+            specific.date.getDate() < 10 ?
+            "0"+(specific.date.getDate()) :
+            (specific.date.getDate());
+
+        var day = year+"-"+month+"-"+date;
+        
+        return day;
+    }
 %>
