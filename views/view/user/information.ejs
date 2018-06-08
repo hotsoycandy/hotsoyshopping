@@ -1,5 +1,5 @@
 <div class="container">
-   <h4>In Your Cart </h4>
+   <h4 class="float-left">In Your Cart </h4><a href="/user/buycart" class="btn btn-primary float-right mb-3 text-white">Buy</a>
     <table class="table">
         <thead>
             <tr>
@@ -16,7 +16,7 @@
             for(var i=0; i<buylogs.length; i++) { 
                 if(buylogs[i].status != "cart") continue;
                 count++;
-                var day = date_format(buylogs[i].date);
+                var day = date_format(buylogs[i].reg_date);
         %>
             <tr>
                 <th style="text-align:center;"><%= count %></th>
@@ -48,7 +48,7 @@
             for(var i=0; i<buylogs.length; i++) { 
                 if(buylogs[i].status != "buy") continue;
                 count++;
-                var day = date_format(buylogs[i].date);
+                var day = date_format(buylogs[i].reg_date);
         %>
             <tr>
                 <th style="text-align:center;"><%= count %></th>
@@ -78,13 +78,13 @@
             var count = 0;
             for(var i=0; i<products.length; i++) { 
                 count++;
-//                var day = date_format(products[i].date);
+                var day = date_format(products[i].reg_date);
         %>
             <tr>
                 <th style="text-align:center;"><%= count %></th>
                 <td style="text-align:center;"><%= products[i].name  %></td>
                 <td style="text-align:center;"><%= money_format(products[i].price) %></td>
-<!--                <td style="text-align:center;"><%= day %></td>-->
+                <td style="text-align:center;"><%= day %></td>
             </tr>
         <% } %>
         </tbody>

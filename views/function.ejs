@@ -4,17 +4,17 @@
     }
     
     date_format = function(specific){
-        var year  = specific.date.getFullYear();
+        var year  = specific.getFullYear();
 
         var month =
-            specific.date.getMonth()+1 < 10 ?
-            "0"+(specific.date.getMonth()+1) :
-            (specific.date.getMonth()+1);
+            specific.getMonth()+1 < 10 ?
+            "0"+(specific.getMonth()+1) :
+            (specific.getMonth()+1);
 
         var date =
-            specific.date.getDate() < 10 ?
-            "0"+(specific.date.getDate()) :
-            (specific.date.getDate());
+            specific.getDate() < 10 ?
+            "0"+(specific.getDate()) :
+            (specific.getDate());
 
         var day = year+"-"+month+"-"+date;
         

@@ -143,12 +143,13 @@ module.exports = function(app, models){
         });
     });
     
+    /* buy products */
     app.post("/product/buyProduct",function(req,res){
         if(check_login(req,res)) return;
         var user = req.session.userinfo;
         
-        var pid     = req.body.id;
         var bid     = user._id;
+        var pid     = req.body.id;
         var name    = req.body.name;
         var type    = req.body.type;
         var price   = req.body.price;
@@ -176,6 +177,20 @@ module.exports = function(app, models){
             Product.find({seller_id : req.session.userinfo._id },function(err,products){
                 render(req,res,"view/user/information.ejs",{buylogs : buylogs, products : products});
             });
+        });
+    });
+    
+    app.get("/user/buycart",function(req,res){
+        if(check_login(req,res)) return;
+        
+        var bid = req.session.userinfo._id;
+        BuyLog.find({bid : bid, status : "cart" }, function(err,data){
+            if(err) throw err;
+            for(var i=0; i<data.length; i++){
+                data[i].status = "buy";
+                data[i].save(function(err){ if(err) throw err; });
+            }
+            res.redirect("/user/information");
         });
     });
     
