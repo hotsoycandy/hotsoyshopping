@@ -30,7 +30,7 @@ module.exports = function(app, models){
         var keyword = req.query.keyword ? req.query.keyword : "";
         var rule = keyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
         
-        Product.find({"name" : new RegExp(rule)},function(err,products){
+        Product.find({"name" : new RegExp(rule)}, function(err,products){
             render(req,res,"view/home.ejs",{products : products, keyword : keyword});
         });
     });
