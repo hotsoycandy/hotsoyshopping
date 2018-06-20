@@ -180,18 +180,20 @@ module.exports = function(app, models){
         });
     });
     
-    app.get("/user/buycart",function(req,res){
+    app.post("/user/buycart",function(req,res){
         if(check_login(req,res)) return;
         
-        var bid = req.session.userinfo._id;
-        BuyLog.find({bid : bid, status : "cart" }, function(err,data){
-            if(err) throw err;
-            for(var i=0; i<data.length; i++){
-                data[i].status = "buy";
-                data[i].save(function(err){ if(err) throw err; });
-            }
-            res.redirect("/user/information");
-        });
+        var ids = req.body.id;
+        for(var i=0; i<ids.length; i++){
+            BuyLog.find({_id : ids[i], status : "cart" }, function(err,data){
+                if(err) throw err;
+                for(var i=0; i<data.length; i++){
+                    data[i].status = "buy";
+                    data[i].save(function(err){ if(err) throw err; });
+                }
+            });
+        }
+        res.redirect("/user/information");
     });
     
     

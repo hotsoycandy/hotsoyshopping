@@ -1,33 +1,37 @@
 <div class="container">
-   <h4 class="float-left">In Your Cart </h4><a href="/user/buycart" class="btn btn-primary float-right mb-3 text-white">Buy</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col" style="text-align:center; width:5%;">#</th>
-                <th scope="col" style="text-align:center; width:30%;">Product name</th>
-                <th scope="col" style="text-align:center; width:10%;">Quntity</th>
-                <th scope="col" style="text-align:center; width:20%;">Total Price</th>
-                <th scope="col" style="text-align:center; width:20%;">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-        <%
-            var count = 0;
-            for(var i=0; i<buylogs.length; i++) { 
-                if(buylogs[i].status != "cart") continue;
-                count++;
-                var day = date_format(buylogs[i].reg_date);
-        %>
-            <tr>
-                <th style="text-align:center;"><%= count %></th>
-                <td style="text-align:center;"><%= buylogs[i].name %></td>
-                <td style="text-align:center;"><%= buylogs[i].quntity %></td>
-                <td style="text-align:center;"><%= money_format(buylogs[i].price) %></td>
-                <td style="text-align:center;"><%= day %></td>
-            </tr>
-        <% } %>
-        </tbody>
-    </table>
+    <form action="/user/buycart" method="post">
+        <h4 class="float-left">In Your Cart </h4><button type="submit" class="btn btn-primary float-right mb-3 text-white">Buy</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" style="text-align:center; width:5%;">#</th>
+                    <th scope="col" style="text-align:center; width:5%;"><input type="checkbox" id="chkall"></th>
+                    <th scope="col" style="text-align:center; width:30%;">Product name</th>
+                    <th scope="col" style="text-align:center; width:5%;">Quntity</th>
+                    <th scope="col" style="text-align:center; width:20%;">Total Price</th>
+                    <th scope="col" style="text-align:center; width:20%;">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            <%
+                var count = 0;
+                for(var i=0; i<buylogs.length; i++) { 
+                    if(buylogs[i].status != "cart") continue;
+                    count++;
+                    var day = date_format(buylogs[i].reg_date);
+            %>
+                <tr>
+                    <th style="text-align:center;"><%= count %></th>
+                    <th style="text-align:center;"><input type="checkbox" class="chkbox" value="<%= buylogs[i]._id %>" name="id[]"></th>
+                    <td style="text-align:center;"><%= buylogs[i].name %></td>
+                    <td style="text-align:center;"><%= buylogs[i].quntity %></td>
+                    <td style="text-align:center;"><%= money_format(buylogs[i].price) %></td>
+                    <td style="text-align:center;"><%= day %></td>
+                </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </form>
     <br/>
     <br/>
     <br/>
@@ -90,3 +94,12 @@
         </tbody>
     </table>
 </div>
+<script>
+    $("#chkall").click(function(){
+        if($("#chkall").is(":checked")){
+            $(".chkbox").prop("checked",true);
+        }else{
+            $(".chkbox").prop("checked",false);
+        }
+    });
+</script>
